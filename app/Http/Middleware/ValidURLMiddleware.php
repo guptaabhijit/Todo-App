@@ -17,9 +17,10 @@ class ValidURLMiddleware
     public function handle($request, Closure $next)
     {
         $URI = $request->getRequestUri();
-        Log::info("Inside Handle");
-        Log::info($URI);
+        Log::info("1) => Inside Handle ".$URI);
+
         if(preg_match("/todos/", $URI)){
+            Log::info("1) => Inside Handle prefix matched ".$URI);
             return $next($request);
         }
 
