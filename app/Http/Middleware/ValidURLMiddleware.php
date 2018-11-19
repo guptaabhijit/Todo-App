@@ -20,11 +20,11 @@ class ValidURLMiddleware
         Log::info("1) => Inside Handle ".$URI);
 
         if(preg_match("/todos/", $URI)){
-            Log::info("1) => Inside Handle prefix matched ".$URI);
+            Log::info("URL contains /todos/ ".$URI);
             return $next($request);
         }
 
-        Log::info("returned from Handler");
+        Log::info("Returning from Handler { ValidURLMiddleware}");
         return CustomResponses::getBadRequest();
 
 

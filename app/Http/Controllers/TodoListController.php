@@ -8,11 +8,12 @@ use App\CustomResponses;
 use App\TodoList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\GroupList;
 
 use Response;
 use Validator;
 use Log;
-use App\GroupList;
+
 
 
 class TodoListController extends Controller

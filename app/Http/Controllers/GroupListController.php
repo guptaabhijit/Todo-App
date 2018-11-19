@@ -16,8 +16,8 @@ class GroupListController extends Controller
 
     function index(){
 
+        //return GroupList::all()->toArray();
         return GroupList::all();
-
 
     }
 
@@ -31,7 +31,7 @@ class GroupListController extends Controller
 
         $todos = GroupList::find($id)->todo;
 
-        /*        foreach ($todos as $todo) {
+        /* foreach ($todos as $todo) {
             Log::info($todo);
         }*/
 
