@@ -11,7 +11,8 @@ Features:
 4) User should able to delete todo Item
 5) User should edit todo item
 
-Following Signature APIs :
+## Following Signature APIs :
+
 
 API | Signature |
 --- | --- | 
@@ -28,9 +29,9 @@ DELETE  |		/todos/group/{id} => delete group along with all todos
 GET  |			/todos/group/{id}    ⇒ GET all todo items in ID group
 
 
-State Transition of STATUS:- 
+## State Transition of STATUS:- 
 
-
+![alt text](https://github.com/guptaabhijit/Todo-App/blob/master/StateTransitionToDo.png)
 
 
 HTTP Status and Message Handling:-
