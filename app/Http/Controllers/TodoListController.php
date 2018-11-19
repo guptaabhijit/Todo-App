@@ -27,7 +27,7 @@ class TodoListController extends Controller
         if(sizeof($todo_lists) > 0)
             return Response::json($todo_lists);
         else
-            return CustomResponses::getNotFoundError();
+            return CustomResponses::getNotFoundError("No record exists");
 
     }
 
@@ -37,14 +37,10 @@ class TodoListController extends Controller
         $list = TodoList::find($id);
 
         if(isset($list->tasks)){
-            return response()->json([
-                'tasks' => $list->tasks,
-                'id' => $list->id,
-                'status' => $list->status,
-            ]);
+            return $list;
         }
         else{
-          return  CustomResponses::getNotFoundError();
+          return  CustomResponses::getNotFoundError("No record exists");
         }
 
     }
@@ -114,13 +110,13 @@ class TodoListController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return  CustomResponses::getBadRequest();
+            return  CustomResponses::getBadRequest("tasks and group_list_id is mandatory");
         }
 
-        $todos_list = GroupList::find($request->input("group_list_id"));
+        $group_list = GroupList::find($request->input("group_list_id"));
 
-        if(!isset($todos_list)){
-            return CustomResponses::getBadRequest();
+        if(!isset($group_list)){
+            return CustomResponses::getBadRequest("group_list_id is not valid");
         }
 
         $list = new TodoList;
@@ -128,7 +124,7 @@ class TodoListController extends Controller
         $list->status = \App\Constants::StateTransition[1];
         $list->group_list_id = $request->input("group_list_id");
         $list->save();
-        return "$list";
+        return $list;
 
     }
 

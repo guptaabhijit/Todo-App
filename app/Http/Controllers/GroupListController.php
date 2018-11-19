@@ -17,7 +17,12 @@ class GroupListController extends Controller
     function index(){
 
         //return GroupList::all()->toArray();
-        return GroupList::all();
+        $group_list = GroupList::all();
+
+        if(sizeof($group_list) > 0)
+            return Response::json($group_list);
+        else
+            return CustomResponses::getNotFoundError("No record exists");
 
     }
 
@@ -70,7 +75,7 @@ class GroupListController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return  CustomResponses::getBadRequest();
+            return  CustomResponses::getBadRequest("title is mandatory");
         }
 
         $groupList = new GroupList;
@@ -79,7 +84,7 @@ class GroupListController extends Controller
 
         $groupList->save();
 
-        return "$groupList";
+        return $groupList;
 
     }
 

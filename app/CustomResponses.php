@@ -15,45 +15,51 @@ use Response;
 class CustomResponses
 {
 
-    static public function getNotFoundError(){
+    static public function getNotFoundError($mesg = "Not found"){
         return Response::json([
-            'message' => "NOT_FOUND",
-            'code' => 404
+            'code' => 404,
+            'data' => "NOT_FOUND",
+            'message' => $mesg
         ], 404);
     }
 
-    static public function getFoundSuccess(){
+    static public function getFoundSuccess($mesg = "Success"){
 
         return Response::json([
-            'message' => "SUCCESS",
-            'code' => 200
+            'code' => 200,
+            'data' => $mesg,
+            'message' => "SUCCESS"
         ], 200);
 
     }
 
-    static public function getCreatedSuccess(){
+    static public function getCreatedSuccess($mesg = "Created"){
 
         return Response::json([
-            'message' => "CREATED",
-            'code' => 201
+            'code' => 201,
+            'data' => $mesg,
+            'message' => "CREATED"
         ], 201);
 
     }
 
-    static public function getBadRequest(){
+    static public function getBadRequest($mesg = "Bad Request"){
 
         return Response::json([
-            'message' => "BAD_REQUEST",
-            'code' => 400
+            'code' => 400,
+            'data' => $mesg,
+            'message' => "BAD_REQUEST"
+
         ], 400);
 
     }
 
-    static public function getForbiddenError(){
+    static public function getForbiddenError($mesg = "Forbidden"){
 
         return Response::json([
-            'message' => "FORBIDDEN",
-            'code' => 403
+            'code' => 403,
+            'data' => $mesg,
+            'message' => "FORBIDDEN"
         ], 403);
 
     }
