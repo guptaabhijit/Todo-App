@@ -21,7 +21,7 @@ GET |  /todos
 GET |  /todos/{todo}
 DELETE |  /todos/{todo}
 PUT  |			/todos
-PUT	 |		/todos/status/{todo} (Created,Pending,OnGoing,Done)	
+PUT	 |		/todos/status (Created,Pending,OnGoing,Done)	
 GET	 |		/todos/status?status=created
 GET	 | 		/todos/group => get all groups
 POST  |			/todos/group  => create new Group

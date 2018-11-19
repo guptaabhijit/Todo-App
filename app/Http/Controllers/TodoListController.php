@@ -164,20 +164,20 @@ class TodoListController extends Controller
                     }
                     break;
                 default:
-                    return CustomResponses::getBadRequest();
+                    return CustomResponses::getBadRequest("Give valid status in Query Params");
 
             }
             if($flag){
                 $list->status = $new_status;
                 $list->save();
-                return "$list";
+                return $list;
             }
 
-            return CustomResponses::getForbiddenError();
+            return CustomResponses::getForbiddenError("Transition Not possible");
 
 
         }else{
-            return  CustomResponses::getNotFoundError();
+            return  CustomResponses::getNotFoundError("No task found");
         }
     }
 
