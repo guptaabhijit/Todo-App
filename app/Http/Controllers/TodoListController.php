@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Constants;
 use App\CustomResponses;
 use App\TodoList;
@@ -15,7 +14,6 @@ use Validator;
 use Log;
 
 
-
 class TodoListController extends Controller
 {
 
@@ -23,33 +21,19 @@ class TodoListController extends Controller
     //show all tasks
     function index(){
 
-        $todo_lists = TodoList::all();
-        if(sizeof($todo_lists) > 0)
-            return Response::json($todo_lists);
-        else
-            return CustomResponses::getNotFoundError("No record exists");
-
+        return \App\Http\Services\TodoListService::getAllTodoTasks();
     }
 
-    //Show one task based on ID.
+   //Show one task based on ID.
     function show($id){
-
-        $list = TodoList::find($id);
-
-        if(isset($list->tasks)){
-            return $list;
-        }
-        else{
-          return  CustomResponses::getNotFoundError("No record exists");
-        }
-
+        return \App\Http\Services\TodoListService::getTodoTask($id);
     }
+
 
     //update one item
     //Should give old Id and new Name
     //status will change to Created.
     //check if status is not "DONE"
-
     function update(Request $request){
 
         Log::info("Update Method is called().  Method => ". $request->getMethod()." & URI => ".$request->getRequestUri());
@@ -63,41 +47,13 @@ class TodoListController extends Controller
             return CustomResponses::getBadRequest();
         }
 
-
-        $list = TodoList::find($request->input("id"));
-
-        if(isset($list->tasks)){
-
-            if($list->status != \App\Constants::StateTransition[4] ){
-                $list->tasks = $request->input("tasks");
-                $list->id = $request->input("id");
-                $list->status = \App\Constants::StateTransition[1];
-                $list->save();
-                return "$list";
-            }else{
-                return  CustomResponses::getForbiddenError();
-            }
-        }
-
-        else{
-            return  CustomResponses::getNotFoundError();
-        }
+       return \App\Http\Services\TodoListService::editTodoTask($request);
 
     }
 
     //delete one item
     function destroy($id){
-        $list = TodoList::find($id);
-        if(isset($list->tasks)){
-            $list->delete();
-            return CustomResponses::getFoundSuccess();
-        }
-        else{
-            return CustomResponses::getNotFoundError();
-        }
-
-
-
+        return \App\Http\Services\TodoListService::deleteTodoTask($id);
     }
 
 
@@ -113,18 +69,7 @@ class TodoListController extends Controller
             return  CustomResponses::getBadRequest("tasks and group_list_id is mandatory");
         }
 
-        $group_list = GroupList::find($request->input("group_list_id"));
-
-        if(!isset($group_list)){
-            return CustomResponses::getBadRequest("group_list_id is not valid");
-        }
-
-        $list = new TodoList;
-        $list->tasks = $request->input("tasks");
-        $list->status = \App\Constants::StateTransition[1];
-        $list->group_list_id = $request->input("group_list_id");
-        $list->save();
-        return $list;
+        return \App\Http\Services\TodoListService::addTodoTask($request);
 
     }
 
@@ -139,66 +84,13 @@ class TodoListController extends Controller
         if ($validator->fails()) {
             return CustomResponses::getBadRequest();
         }
-        $list = TodoList::find($request->input("id"));
+        return \App\Http\Services\TodoListService::updateTodoTaskStatus($request);
 
-
-        if(isset($list->tasks)){
-
-            $old_status = $list->status; $new_status = $request->status;
-            $new_status = strtoupper($new_status);
-            $flag = false;
-            switch ($new_status){
-                case Constants::StateTransition[2]:
-                    if($old_status == Constants::StateTransition[1] || $old_status == Constants::StateTransition[3]){
-                        $flag = true;
-                    }
-                    break;
-                case Constants::StateTransition[3]:
-                    if($old_status == Constants::StateTransition[1] || $old_status == Constants::StateTransition[2]){
-                        $flag = true;
-                    }
-                    break;
-                case Constants::StateTransition[4]:
-                    if($old_status == Constants::StateTransition[2]){
-                        $flag = true;
-                    }
-                    break;
-                default:
-                    return CustomResponses::getBadRequest("Give valid status in Query Params");
-
-            }
-            if($flag){
-                $list->status = $new_status;
-                $list->save();
-                return $list;
-            }
-
-            return CustomResponses::getForbiddenError("Transition Not possible");
-
-
-        }else{
-            return  CustomResponses::getNotFoundError("No task found");
-        }
     }
 
     function getTasksStatus(Request $request){
-
-        Log::info("Inside getTasksStatus");
         Log::info("getTasksStatus Method is called().  Method => ". $request->getMethod()." & URI => ".$request->getRequestUri());
-        parse_str($request->getQueryString(), $output);
-        if(array_key_exists("status",$output)){
-            Log::info("Output ".$output["status"]);
-            $status = $output["status"];
-            $lists = DB::table('todo_lists')
-                        ->where('status', '=', $status)
-                        ->get();
-
-            return $lists;
-        }
-
-
-
-
+        return \App\Http\Services\TodoListService::getTodoTaskStatus($request);
 
     }
 

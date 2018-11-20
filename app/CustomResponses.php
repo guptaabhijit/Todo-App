@@ -18,8 +18,8 @@ class CustomResponses
     static public function getNotFoundError($mesg = "Not found"){
         return Response::json([
             'code' => 404,
-            'data' => "NOT_FOUND",
-            'message' => $mesg
+            'data' => $mesg,
+            'message' => "NOT_FOUND"
         ], 404);
     }
 
@@ -49,7 +49,6 @@ class CustomResponses
             'code' => 400,
             'data' => $mesg,
             'message' => "BAD_REQUEST"
-
         ], 400);
 
     }

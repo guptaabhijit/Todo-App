@@ -24,7 +24,7 @@ use App\CustomResponses;
 
 
 
-Route::get('/todos/group','GroupListController@index');
+Route::get('/todos/groups','GroupListController@index');
 Route::get('/todos/group/{id}','GroupListController@show');
 Route::post('/todos/group','GroupListController@store');
 Route::delete('/todos/group/{id}','GroupListController@destroy');
