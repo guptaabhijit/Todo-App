@@ -140,6 +140,8 @@ class TodoListService
     static function getTodoTaskStatus(Request $request){
 
         parse_str($request->getQueryString(), $output);
+
+
         if(array_key_exists("status",$output)){
             Log::info("Output ".$output["status"]);
             $status = $output["status"];
@@ -159,17 +161,26 @@ class TodoListService
                     ->get();
             }
 
-            if($lists->count() > 0){
-                return $lists;
-            }
-            else{
-                return CustomResponses::getNotFoundError("No result");
-            }
+
+        }
+        elseif(array_key_exists("group_list_id",$output)){
+            $group_list_id = $output["group_list_id"];
+            $lists = DB::table('todo_lists')
+                ->where('group_list_id','=',$group_list_id)
+                ->get();
         }
         else{
             return CustomResponses::getNotFoundError("No status in Query Params");
         }
 
+
+
+        if($lists->count() > 0){
+            return $lists;
+        }
+        else{
+            return CustomResponses::getNotFoundError("No result");
+        }
     }
 
 
