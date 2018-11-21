@@ -23,16 +23,31 @@ use Validator;
 class GroupListService
 {
 
-    static function getAllGroups(){
+    function getAllGroups(){
         $group_list = GroupList::all();
 
+        $output = array();
+        foreach ($group_list as $item){
+            Log::info($item->getKey('id'));
+
+            //$categories = GroupList::with('TodoList')->where('id',$item->getKey('id'))->get();
+            $todos = GroupList::find($item->getKey('id'))->todo;
+            Log::info($todos);
+            $json_object = [
+                "group" => $item,
+                "task" => $todos
+            ];
+            array_push($output,$json_object);
+        }
+
         if(sizeof($group_list) > 0)
-            return Response::json($group_list);
+            //return Response::json($group_list);
+            return Response::json($output);
         else
             return CustomResponses::getNotFoundError("No record exists");
     }
 
-    static function showGroup($id){
+     function showGroup($id){
         $todos = GroupList::find($id);
         if(!isset($todos)){
             return CustomResponses::getBadRequest("Group Does not exist");
@@ -40,9 +55,6 @@ class GroupListService
 
         $todos = GroupList::find($id)->todo;
 
-        /* foreach ($todos as $todo) {
-            Log::info($todo);
-        }*/
 
         if($todos->count() > 0){
             return $todos;
@@ -51,7 +63,7 @@ class GroupListService
             return CustomResponses::getNotFoundError("No tasks in the group. Create one :)");
     }
 
-    static function deleteGroup($id){
+     function deleteGroup($id){
         $groupList = GroupList::find($id);
 
         if(isset($groupList->title)){
@@ -63,7 +75,7 @@ class GroupListService
         }
     }
 
-    static function createGroup(Request $request){
+     function createGroup(Request $request){
 
 
         $groupList = new GroupList;

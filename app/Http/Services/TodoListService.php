@@ -23,7 +23,7 @@ use Log;
 class TodoListService
 {
 
-   static function getAllTodoTasks(){
+    function getAllTodoTasks(){
 
         $todo_lists = TodoList::all();
         if(sizeof($todo_lists) > 0)
@@ -33,7 +33,7 @@ class TodoListService
 
     }
 
-    static function getTodoTask($id){
+     function getTodoTask($id){
         $list = TodoList::find($id);
 
         if(isset($list->tasks)){
@@ -45,7 +45,7 @@ class TodoListService
 
     }
 
-    static function editTodoTask(Request $request){
+     function editTodoTask(Request $request){
         $list = TodoList::find($request->input("id"));
 
         if(isset($list->tasks)){
@@ -66,7 +66,7 @@ class TodoListService
     }
 
 
-    static function deleteTodoTask($id){
+     function deleteTodoTask($id){
 
        $list = TodoList::find($id);
         if(isset($list->tasks)){
@@ -79,7 +79,7 @@ class TodoListService
 
     }
 
-    static function addTodoTask(Request $request){
+     function addTodoTask(Request $request){
         $group_list = GroupList::find($request->input("group_list_id"));
 
         if(!isset($group_list)){
@@ -94,7 +94,7 @@ class TodoListService
         return $list;
     }
 
-    static function updateTodoTaskStatus(Request $request){
+     function updateTodoTaskStatus(Request $request){
         $list = TodoList::find($request->input("id"));
 
 
@@ -137,7 +137,7 @@ class TodoListService
         }
     }
 
-    static function getTodoTaskStatus(Request $request){
+     function getTodoTaskStatus(Request $request){
 
         parse_str($request->getQueryString(), $output);
 

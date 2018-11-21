@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Log;
 use App\GroupList;
 use App\CustomResponses;
+use App\Http\Services\GroupListService;
 
 use Response;
 use Validator;
@@ -13,23 +14,36 @@ use Validator;
 class GroupListController extends Controller
 {
 
+    private $groupListService;
+
+    function __construct(GroupListService $groupListService)
+    {
+
+        Log::info("Constructor of GroupListController is called");
+        $this->groupListService = $groupListService;
+
+    }
+
+
     function index(){
-        return \App\Http\Services\GroupListService::getAllGroups();
+        return $this->groupListService->getAllGroups();
+        //return GroupListService::getAllGroups();
     }
 
     //show all todos from group Id;
     function show($id){
-        return \App\Http\Services\GroupListService::showGroup($id);
+        return $this->groupListService->showGroup($id);
     }
 
     //delete one group
     function destroy($id){
-       return \App\Http\Services\GroupListService::deleteGroup($id);
+       return $this->groupListService->deleteGroup($id);
     }
 
 
     //Add one group
     function store(Request $request){
+
 
         $validator = Validator::make($request->all(), [
             'title' => 'required',
@@ -39,7 +53,7 @@ class GroupListController extends Controller
             return  CustomResponses::getBadRequest("title is mandatory");
         }
 
-        return \App\Http\Services\GroupListService::createGroup($request);
+        return $this->groupListService->createGroup($request);
     }
 
 

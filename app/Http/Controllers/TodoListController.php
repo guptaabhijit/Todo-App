@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\GroupList;
 
+use App\Http\Services\TodoListService;
 use Response;
 use Validator;
 use Log;
@@ -18,15 +19,24 @@ class TodoListController extends Controller
 {
 
 
+    private $todoListService;
+
+    function __construct(TodoListService $todoListService)
+    {
+
+        Log::info("Constructor of TodoListController is called");
+        $this->todoListService = $todoListService;
+
+    }
     //show all tasks
     function index(){
 
-        return \App\Http\Services\TodoListService::getAllTodoTasks();
+        return $this->todoListService->getAllTodoTasks();
     }
 
    //Show one task based on ID.
     function show($id){
-        return \App\Http\Services\TodoListService::getTodoTask($id);
+        return $this->todoListService->getTodoTask($id);
     }
 
 
@@ -47,13 +57,13 @@ class TodoListController extends Controller
             return CustomResponses::getBadRequest();
         }
 
-       return \App\Http\Services\TodoListService::editTodoTask($request);
+       return $this->todoListService->editTodoTask($request);
 
     }
 
     //delete one item
     function destroy($id){
-        return \App\Http\Services\TodoListService::deleteTodoTask($id);
+        return $this->todoListService->deleteTodoTask($id);
     }
 
 
@@ -69,7 +79,7 @@ class TodoListController extends Controller
             return  CustomResponses::getBadRequest("tasks and group_list_id is mandatory");
         }
 
-        return \App\Http\Services\TodoListService::addTodoTask($request);
+        return $this->todoListService->addTodoTask($request);
 
     }
 
@@ -84,13 +94,13 @@ class TodoListController extends Controller
         if ($validator->fails()) {
             return CustomResponses::getBadRequest();
         }
-        return \App\Http\Services\TodoListService::updateTodoTaskStatus($request);
+        return $this->todoListService->updateTodoTaskStatus($request);
 
     }
 
     function getTasksStatus(Request $request){
         Log::info("getTasksStatus Method is called().  Method => ". $request->getMethod()." & URI => ".$request->getRequestUri());
-        return \App\Http\Services\TodoListService::getTodoTaskStatus($request);
+        return $this->todoListService->getTodoTaskStatus($request);
 
     }
 
