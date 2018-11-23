@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-
+use Log;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -17,53 +17,38 @@ class ExampleTest extends TestCase
      */
 
 
-    private $client;
+   // private $client;
 
-    public function setUp()
+ /*   public function setUp()
     {
         //default IP for vagrant/homestead  192.168.10.10
         //Use localhost if not running any virtual machine.
-        $this->client = new Client([
+       $this->client = new Client([
             'base_uri'        => '192.168.10.10',
             'exceptions' => false,
         ]);
 
         parent::setUp();
     }
-
+*/
 
 
     public function testBasicTest()
     {
-        $response = $this->client->request(
-                'GET',
-                '192.168.10.10/todos'
-        );
-
-
-        $this->assertEquals(200, $response->getStatusCode());
-
+        Log::info("Inside testBasicTest");
+        $response = $this->json('GET', '/todos');
+        $response->assertStatus(404);
     }
 
     public function testBasicErrorTest(){
 
-        $response = "";
-        try {
-
-            $response = $this->client->request(
-                'GET',
-                '192.168.10.10'
-            );
-        }catch(ClientException $e){
-            echo 'Uh oh! ' . $e->getMessage();
-        }
-
-        $this->assertEquals(400,$response->getStatusCode());
+        $response = $this->json('GET', '/');
+        $response->assertStatus(400);
     }
 
 
 
-    public function tearDown(){
+  /*  public function tearDown(){
         $this->client = null;
-    }
+    }*/
 }

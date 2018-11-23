@@ -1,3 +1,13 @@
 language: php
 
+php:
+  - 7.2
+
+before_script:
+  - cp .env.travis .env
+  - mysql -e 'create database todo;'
+  - composer self-update
+  - composer install --no-interaction
+  - php artisan migrate
+
 script: phpunit
